@@ -1,0 +1,501 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>loopback3 快速创建标准的RESTful数据访问接口 | laoxue</title>
+  <meta name="author" content="老学">
+  
+  <meta name="description" content="好记性不如烂笔头">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="loopback3 快速创建标准的RESTful数据访问接口">
+  <meta property="og:site_name" content="laoxue">
+
+  
+    <meta property="og:image" content>
+  
+
+  <link rel="alternate" href="/atom.xml" title="laoxue" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+
+</head>
+</html>
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/img/default/laoxue.png">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">laoxue</a></h1>
+		    <h2><a href="/">学习是一辈子的事</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>Home</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>Archives</a>
+		    		
+		    		  <a href="/node"><i class="fa fa-book"></i>Node.js</a>
+		    		
+		    		  <a href="/hexo"><i class="fa fa-book"></i>Books</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		      <a href="/atom.xml"><i class="fa fa-rss"></i>Rss</a>
+		    
+		      <a href="/customization"><i class="fa fa-question-circle"></i>Customization</a>
+		    
+		      <a href="/about"><i class="fa fa-user"></i>About</a>
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2019-08-11T06:29:43.000Z"><a href="/2019/08/11/OKR-API-的设计与实现/">2019-08-11</a></time>
+        
+  
+    <h1 class="title">loopback3 快速创建标准的RESTful数据访问接口</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计思想"><span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OKR-是什么？"><span class="toc-text">OKR 是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么是-LoopBack？"><span class="toc-text">为什么是 LoopBack？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#需求定义"><span class="toc-text">需求定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OKR-管理功能"><span class="toc-text">OKR 管理功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#基础数据"><span class="toc-text">基础数据</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据模型"><span class="toc-text">数据模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模型关系"><span class="toc-text">模型关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实现步骤"><span class="toc-text">实现步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#创建应用"><span class="toc-text">创建应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#应用的相关信息"><span class="toc-text">应用的相关信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加数据库连接"><span class="toc-text">添加数据库连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加模型（models）"><span class="toc-text">添加模型（models）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#模型信息"><span class="toc-text">模型信息</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建模型关系"><span class="toc-text">创建模型关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义模型关系"><span class="toc-text">定义模型关系</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限管理"><span class="toc-text">权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用户角色"><span class="toc-text">用户角色</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#对系统管理员进行授权"><span class="toc-text">对系统管理员进行授权</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建-ACL-（访问控制列表）"><span class="toc-text">创建 ACL （访问控制列表）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ACL-策略"><span class="toc-text">ACL 策略</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-API-接口"><span class="toc-text">测试 API 接口</span></a></li></ol></li></ol>
+    </div>
+
+        <h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><h3 id="OKR-是什么？"><a href="#OKR-是什么？" class="headerlink" title="OKR 是什么？"></a>OKR 是什么？</h3><p>OKR（Objectives and Key Results）即目标与关键成果法，是一套明确和跟踪目标及其完成情况的管理工具和方法，由英特尔公司发明。</p>
+<p>OKR 的主要目标是明确公司和团队的“目标”以及明确每个目标达成的可衡量的“关键结果”。一本关于 OKR 的书将 OKR 定义为“一个重要的思考框架与不断发展的学科，旨在确保员工共同工作，并集中精力做出可衡量的贡献。 ”OKR 可以在整个组织中共享，这样团队就可以在整个组织中明确目标，帮助协调和集中精力。</p>
+<p>创建 OKR 管理 APP 需要搭建后台数据服务器，采用 RESTful 标准接口，利用 loopBack3 框架搭建。</p>
+<h3 id="为什么是-LoopBack？"><a href="#为什么是-LoopBack？" class="headerlink" title="为什么是 LoopBack？"></a>为什么是 LoopBack？</h3><p>LoopBack 框架是由一组 Node.js 的模块构成的。你可以单独使用这些模块或把它们组合在一起使用。 应用通过 LoopBack model API 可以使用以下三种方式访问数据。</p>
+<ul>
+<li>将模型作为一个标准的 Node 对象使用</li>
+<li>通过 HTTP REST API 调用</li>
+<li>通过封装好的 API SDK，包括 iOS, Android 和 Angular</li>
+</ul>
+<p>应用程序通过 LoopBack model API 用以上三种方式查询数据，储存数据，上传文件，发送 email, 推送消息，注册/登陆用户等远程或本地的服务。用户也可以通过 Strong Remoting 将后端的 API 通过 REST, WebSocket(或其他传输协议)供客户端调用。</p>
+<h3 id="需求定义"><a href="#需求定义" class="headerlink" title="需求定义"></a>需求定义</h3><h4 id="OKR-管理功能"><a href="#OKR-管理功能" class="headerlink" title="OKR 管理功能"></a>OKR 管理功能</h4><ul>
+<li>用户需要注册登录才能进行操作。</li>
+<li>用户注册信息：用户名、密码、email、所属部门。</li>
+<li>角色：所有用户、任何未经认证的用户、任何已认证的用户、拥有该对象的用户、系统管理员。</li>
+<li>系统根据不同角色分配相应的权限（静态和动态）。</li>
+<li>系统管理员负责设置对用户和数据字典的管理。</li>
+<li>任何已认证的用户可以查看所有已经创建的 OKR 列表和详情并可以发表评论。</li>
+<li>拥有该对象的用户可以录入和管理本人的 OKR。</li>
+<li>OKR 基本信息：OKR 标题（一）、目标（多）、关键结果（多）。</li>
+<li>OKR 辅助信息：开始日期、结束日期、部门、类型、责任人、评论（多）。</li>
+</ul>
+<h4 id="基础数据"><a href="#基础数据" class="headerlink" title="基础数据"></a>基础数据</h4><p>系统管理员可以对基础数据进行增删改查。基础数据包括：</p>
+<ul>
+<li>公司基本信息</li>
+<li>部门基本信息</li>
+<li>OKR 类型</li>
+</ul>
+<h3 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h3><p>根据需求需要建立 Okr、Object（目标）、KeyResult(关键结果)、Comment（评论）、Company（公司）、Department（部门）、（okrUser）用户等 7 个数据模型。其中 okrUser 继承自 lb3 默认的 user 模型。数据模型需要我们通过 lb 生成器来创建。</p>
+<h3 id="模型关系"><a href="#模型关系" class="headerlink" title="模型关系"></a>模型关系</h3><ul>
+<li>一个公司有多个部门，一个部门属于一个公司。</li>
+<li>一个部门有多个用户，一个 OKR 用户属于一个部门。</li>
+<li>一个用户有多个 OKR，一个 OKR 属于一个 OKR 用户。</li>
+<li>一个 OKR 有多个目标。</li>
+<li>一个目标有多个关键结果。</li>
+<li>一个 OKR 有多个评论。</li>
+<li>一个评论属于一个 OKR 用户。</li>
+</ul>
+<h2 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h2><h3 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h3><h4 id="应用的相关信息"><a href="#应用的相关信息" class="headerlink" title="应用的相关信息"></a>应用的相关信息</h4><ul>
+<li>项目名称: <code>lb-okr-api</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ lb</span><br><span class="line">? 您的应用程序的名称是什么？ lb-okr-api</span><br><span class="line">? 输入目录名称以包含项目： lb-okr-api</span><br><span class="line">   create lb-okr-api/</span><br><span class="line">     info 将工作目录更改为 lb-okr-api</span><br><span class="line"></span><br><span class="line">? 您想要使用哪个版本的 LoopBack？ 3.x (Active Long Term Support)</span><br><span class="line">? 您想要什么种类的应用程序？ api-server (使用本地用户认证的 LoopBack API 服务器)</span><br><span class="line">正在生成 .yo-rc.json</span><br><span class="line"></span><br><span class="line">I&apos;m all done. Running npm install for you to install the required dependencies. If this fails, try running the command yourself.</span><br><span class="line"></span><br><span class="line">后续步骤：</span><br><span class="line"></span><br><span class="line">  将目录更改为您的应用程序</span><br><span class="line">    $ cd lb-okr-api</span><br><span class="line"></span><br><span class="line">  在应用程序中创建模型</span><br><span class="line">    $ lb model</span><br><span class="line"></span><br><span class="line">  运行应用程序</span><br><span class="line">    $ node .</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加数据库连接"><a href="#添加数据库连接" class="headerlink" title="添加数据库连接"></a>添加数据库连接</h3><p>lb 可以连接多种常用的数据库，包括关系型数据库 MySQL 和非关系型数据库 MongoDB 等。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ lb datasource</span><br><span class="line">? 输入数据源名称： okrdb</span><br><span class="line">? 为 okrdb 选择连接器： MongoDB （StrongLoop 支持）</span><br><span class="line">? Connection String url to override other settings (eg: mongodb://username:password@hostname:por</span><br><span class="line">t/database):</span><br><span class="line">? host: localhost</span><br><span class="line">? port: 27017</span><br><span class="line">? user:</span><br><span class="line">? password: [hidden]</span><br><span class="line">? database: lb_okr</span><br><span class="line">? 安装 loopback-connector-mongodb@^4.0.0 Yes</span><br></pre></td></tr></table></figure>
+
+<p>在<code>lb-okr-api/server/datasources.json</code>文件中自动添加了如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;db&quot;: &#123;</span><br><span class="line">    &quot;name&quot;: &quot;db&quot;,</span><br><span class="line">    &quot;connector&quot;: &quot;memory&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;okrdb&quot;: &#123;</span><br><span class="line">    &quot;host&quot;: &quot;localhost&quot;,</span><br><span class="line">    &quot;port&quot;: 27017,</span><br><span class="line">    &quot;url&quot;: &quot;&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;lb_okr&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;okrdb&quot;,</span><br><span class="line">    &quot;user&quot;: &quot;&quot;,</span><br><span class="line">    &quot;connector&quot;: &quot;mongodb&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>删除该文件中<code>db</code>键值对，再将<code>okrdb</code>改成<code>db</code>。完成后是下面的样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;db&quot;: &#123;</span><br><span class="line">    &quot;host&quot;: &quot;localhost&quot;,</span><br><span class="line">    &quot;port&quot;: 27017,</span><br><span class="line">    &quot;url&quot;: &quot;&quot;,</span><br><span class="line">    &quot;database&quot;: &quot;lb_okr&quot;,</span><br><span class="line">    &quot;password&quot;: &quot;&quot;,</span><br><span class="line">    &quot;name&quot;: &quot;okrdb&quot;,</span><br><span class="line">    &quot;user&quot;: &quot;&quot;,</span><br><span class="line">    &quot;connector&quot;: &quot;mongodb&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加模型（models）"><a href="#添加模型（models）" class="headerlink" title="添加模型（models）"></a>添加模型（models）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">$ lb model</span><br><span class="line">? 请输入模型名称： okr</span><br><span class="line">? 选择要向其附加 okr 的数据源： db (mongodb)</span><br><span class="line">? 选择模型的基类 PersistedModel</span><br><span class="line">? 通过 REST API 公开 okr？ Yes</span><br><span class="line">? 定制复数形式（用于构建 REST URL）：</span><br><span class="line">? 公共模型或仅服务器？ 公共</span><br><span class="line">现在添加一些 okr 属性。</span><br><span class="line"></span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称： name</span><br><span class="line">? 属性类型： string</span><br><span class="line">? 是否为必需？ Yes</span><br><span class="line">? 缺省值[对于无，保留为空白]：</span><br><span class="line"></span><br><span class="line">下面添加另一个 okr 属性。</span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称： startDate</span><br><span class="line">? 属性类型： date</span><br><span class="line">? 是否为必需？ Yes</span><br><span class="line">? 缺省值[对于无，保留为空白]：</span><br><span class="line"></span><br><span class="line">下面添加另一个 okr 属性。</span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称： endDate</span><br><span class="line">? 属性类型： date</span><br><span class="line">? 是否为必需？ Yes</span><br><span class="line">? 缺省值[对于无，保留为空白]：</span><br><span class="line"></span><br><span class="line">下面添加另一个 okr 属性。</span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称： department</span><br><span class="line">? 属性类型： string</span><br><span class="line">? 是否为必需？ Yes</span><br><span class="line">? 缺省值[对于无，保留为空白]：</span><br><span class="line"></span><br><span class="line">下面添加另一个 okr 属性。</span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称： category</span><br><span class="line">? 属性类型： string</span><br><span class="line">? 是否为必需？ Yes</span><br><span class="line">? 缺省值[对于无，保留为空白]：</span><br><span class="line"></span><br><span class="line">下面添加另一个 okr 属性。</span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称： people</span><br><span class="line">? 属性类型： string</span><br><span class="line">? 是否为必需？ Yes</span><br><span class="line">? 缺省值[对于无，保留为空白]：</span><br><span class="line"></span><br><span class="line">下面添加另一个 okr 属性。</span><br><span class="line">在完成时输入空的属性名称。</span><br><span class="line">? 属性名称：</span><br><span class="line"></span><br><span class="line">重复此操作，创建所有的数据模型。</span><br></pre></td></tr></table></figure>
+
+<h4 id="模型信息"><a href="#模型信息" class="headerlink" title="模型信息"></a>模型信息</h4><ul>
+<li><p>Name: <code>okr</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>PersistedModel</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+<li>Properties<ul>
+<li><code>name</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+<li><code>startDate</code><ul>
+<li>Date</li>
+<li>required</li>
+</ul>
+</li>
+<li><code>endDate</code><ul>
+<li>Date</li>
+<li>required</li>
+</ul>
+</li>
+<li><code>department</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+<li><code>category</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+<li><code>people</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>okrObject</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>PersistedModel</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+<li>Properties<ul>
+<li><code>content</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>keyResult</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>PersistedModel</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+<li>Properties<ul>
+<li><code>content</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>comment</code></p>
+<ul>
+<li><p>Datasource: <code>db</code></p>
+</li>
+<li><p>Base class: <code>PersistedModel</code></p>
+</li>
+<li><p>Expose via REST: <code>Yes</code></p>
+</li>
+<li><p>Custom plural form: <em>Leave blank</em></p>
+</li>
+<li><p>Properties</p>
+<ul>
+<li><code>content</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+<li><code>people</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>company</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>PersistedModel</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+<li>Properties<ul>
+<li><code>name</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>department</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>PersistedModel</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+<li>Properties<ul>
+<li><code>name</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>category</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>PersistedModel</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+<li>Properties<ul>
+<li><code>name</code><ul>
+<li>String</li>
+<li>required</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Name: <code>okrUser</code></p>
+<ul>
+<li>Datasource: <code>db</code></li>
+<li>Base class: <code>User</code></li>
+<li>Expose via REST: <code>Yes</code></li>
+<li>Custom plural form: <em>Leave blank</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="创建模型关系"><a href="#创建模型关系" class="headerlink" title="创建模型关系"></a>创建模型关系</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ lb relation</span><br><span class="line">? 选择从中创建关系的模型： okr</span><br><span class="line">? 关系类型： has many</span><br><span class="line">? 选择与之创建关系的模型： okrObject</span><br><span class="line">? 输入关系的属性名称： okrObjects</span><br><span class="line">? （可选）输入定制外键：</span><br><span class="line">? 需要直通模型？ No</span><br><span class="line">? 允许在 REST API 中嵌套关系： No</span><br><span class="line">? 禁止包含关系： No</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ lb relation</span><br><span class="line">? 选择从中创建关系的模型： okrObject</span><br><span class="line">? 关系类型： belongs to</span><br><span class="line">? 选择与之创建关系的模型： okr</span><br><span class="line">? 输入关系的属性名称： okr</span><br><span class="line">? （可选）输入定制外键：</span><br><span class="line">? 允许在 REST API 中嵌套关系： No</span><br><span class="line">? 禁止包含关系： No</span><br></pre></td></tr></table></figure>
+
+<h4 id="定义模型关系"><a href="#定义模型关系" class="headerlink" title="定义模型关系"></a>定义模型关系</h4><ul>
+<li>okr</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&quot;relations&quot;: &#123;</span><br><span class="line">    &quot;okrObjects&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;hasMany&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;okrObject&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;keyResults&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;hasMany&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;keyResult&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;comments&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;hasMany&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;comment&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;okr-category&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;belongsTo&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;category&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>okrObject</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&quot;relations&quot;: &#123;</span><br><span class="line">    &quot;okr&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;belongsTo&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;okr&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;keyResults&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;hasMany&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;keyResult&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>keyResult</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&quot;relations&quot;: &#123;</span><br><span class="line">    &quot;okrObject&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;belongsTo&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;okrObject&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;okr&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;belongsTo&quot;,</span><br><span class="line">      &quot;model&quot;: &quot;okr&quot;,</span><br><span class="line">      &quot;foreignKey&quot;: &quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+
+<p>其他模型关系定义参见源代码。</p>
+<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><h4 id="用户角色"><a href="#用户角色" class="headerlink" title="用户角色"></a>用户角色</h4><p>OKR-API 包含以下用户角色:</p>
+<ul>
+<li><code>所有用户</code></li>
+<li><code>任何未经认证的用户</code></li>
+<li><code>任何已认证的用户</code></li>
+<li><code>拥有该对象的用户</code></li>
+<li><code>系统管理员</code></li>
+</ul>
+<p>每个用户的权限取决于他的角色。登录用户需要进行 ACL（访问控制列表）认证。认证成功后，接口会返回一个 token 作为凭据。</p>
+<p>在用户角色中，<code>系统管理员</code>属于<code>其他</code>类型的角色，lb 不会自动提供，需要手工创建。创建自定义角色的方法如下：</p>
+<p>在<code>/server/boot</code>启动文件夹中，添加一个 js 文件。在 js 文件中添加如下代码。该代码执行一次后会添加首个 OKR 用户和自定义角色 admin，并把这个角色分配给首个 OKR 用户。</p>
+<p>在 okrdb 数据库中，可以看到有三个表（collections），分别对应 okr 用户、角色、和角色分配模型。我们可以看到模型数据被持久化到了数据库中。所以，执行一次该代码后，就把这个 js 文件删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(app) &#123;</span><br><span class="line">  var User = app.models.Okruser;</span><br><span class="line">  var Role = app.models.Role;</span><br><span class="line">  var RoleMapping = app.models.RoleMapping;</span><br><span class="line"></span><br><span class="line">  User.create([</span><br><span class="line">    &#123;username: &apos;admin&apos;, email: &apos;aa@bb.cc&apos;, password: &apos;admin&apos;&#125;</span><br><span class="line">  ], function(err, users) &#123;</span><br><span class="line">    if (err) throw err;</span><br><span class="line"></span><br><span class="line">    console.log(&apos;Created users:&apos;, users);</span><br><span class="line"></span><br><span class="line">    //create the admin role</span><br><span class="line">    Role.create(&#123;</span><br><span class="line">      name: &apos;admin&apos;</span><br><span class="line">    &#125;, function(err, role) &#123;</span><br><span class="line">      if (err) throw err;</span><br><span class="line"></span><br><span class="line">      console.log(&apos;Created role:&apos;, role);</span><br><span class="line"></span><br><span class="line">      //make admin</span><br><span class="line">      role.principals.create(&#123;</span><br><span class="line">        principalType: RoleMapping.USER,</span><br><span class="line">        principalId: users[0].id</span><br><span class="line">      &#125;, function(err, principal) &#123;</span><br><span class="line">        if (err) throw err;</span><br><span class="line"></span><br><span class="line">        console.log(&apos;Created principal:&apos;, principal);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="对系统管理员进行授权"><a href="#对系统管理员进行授权" class="headerlink" title="对系统管理员进行授权"></a>对系统管理员进行授权</h4><p>我们在上述代码中创建了一个系统管理员的用户。可以用这个邮箱和密码进行登录，登录验证通过后可以得到一个 token 的返回。</p>
+<p>自定义了角色后，需要给角色授权。假设授予系统管理员对所有模型的所有接口进行操作，可以这样做：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ lb acl</span><br><span class="line">? 选择要应用 ACL 条目的模型： （所有现有模型）</span><br><span class="line">? 选择 ACL 作用域： 所有方法和属性</span><br><span class="line">? 选择访问类型： 全部（匹配所有类型）</span><br><span class="line">? 选择角色 其他</span><br><span class="line">? 请输入角色名称： admin</span><br><span class="line">? 选择要应用的许可权 明确授权访问</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建-ACL-（访问控制列表）"><a href="#创建-ACL-（访问控制列表）" class="headerlink" title="创建 ACL （访问控制列表）"></a>创建 ACL （访问控制列表）</h3><p>通过 lb 生成器，首先对所有模型、所有操作、所有用户设置拒绝访问权限。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ lb acl</span><br><span class="line">? 选择要应用 ACL 条目的模型： （所有现有模型）</span><br><span class="line">? 选择 ACL 作用域： 所有方法和属性</span><br><span class="line">? 选择访问类型： 全部（匹配所有类型）</span><br><span class="line">? 选择角色 所有用户</span><br><span class="line">? 选择要应用的许可权 明确拒绝访问</span><br></pre></td></tr></table></figure>
+
+<p>接下来根据角色开放应有的模型和操作访问限制。</p>
+<h4 id="ACL-策略"><a href="#ACL-策略" class="headerlink" title="ACL 策略"></a>ACL 策略</h4><ul>
+<li><p>授权 <code>系统管理员</code> 对所有模型进行全权操作</p>
+<ul>
+<li>选择要应用 ACL 条目的模型： （所有现有模型）</li>
+<li>选择 ACL 作用域： 所有方法和属性</li>
+<li>选择访问类型： 全部（匹配所有类型）</li>
+<li>选择角色 其他</li>
+<li>请输入角色名称： admin</li>
+<li>选择要应用的许可权 明确授权访问</li>
+</ul>
+</li>
+<li><p>授权 <code>所有用户</code> 对 <code>okrUser</code> 模型进行注册操作。</p>
+</li>
+<li><p>授权 <code>任何已认证的用户</code> 对 <code>okrUser</code> 模型进行登录、注销操作。</p>
+</li>
+<li><p>授权 <code>拥有该对象的用户</code> 对 <code>okrUser</code> 模型进行修改密码、查询自身用户信息操作。</p>
+</li>
+<li><p>授权 <code>任何已认证的用户</code> 对 <code>okr、okrObject、keyResult、comment</code> 模型进行读操作。</p>
+</li>
+<li><p>授权 <code>拥有该对象的用户</code> 对 <code>okr、okrObject、keyResult、comment</code> 模型进行写操作。</p>
+</li>
+</ul>
+<h3 id="测试-API-接口"><a href="#测试-API-接口" class="headerlink" title="测试 API 接口"></a>测试 API 接口</h3><p>启动服务 (<code>node .</code>) 并在浏览器打开网址 <a href="http://localhost:3000" target="_blank" rel="noopener"><code>localhost:3000</code></a> 可以测试已经创建的 OKR_API。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a></div>
+  <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div></div></div>
+      <aside id="sidebar" class="alignright">
+        
+          
+<div class="widget tag">
+  <h3 class="title" id="categories">Categories</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Drupal/">Drupal</a><span class="category-list-count">1</span></li></ul> 
+</div>
+ 
+
+        
+          <div class="widget tag">
+  <h3 class="title">微信公众账号</h3>
+    <ul class="entry">
+      <img src="" alt="" style= "width: 100%">
+    </ul>
+</div>
+        
+          <div class="widget tag">
+  <h3 class="title">Calendar</h3>
+  <div id="calendar"></div>
+</div>
+
+        
+          
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='http://xiaoyun.farbox.com'>晓晓博客</a></li>
+        
+          <li class='link'><a href='http://www.ituring.com.cn/users/136808'>图灵社区</a></li>
+        
+      </ul>
+  </div>
+
+
+        
+          
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">公元 2019 年</a><span class="archive-list-count">2</span></li></ul>
+  </div>
+
+        
+      </aside>
+      <div class="clearfix"></div>
+    </div>
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+    &copy; 2019 老学
+    
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+
+  <div>
+    Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a>
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 百度统计 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?9acf0cedd48dc53be256ede5a98c2aaa";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+</html>
